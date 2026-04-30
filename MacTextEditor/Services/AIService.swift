@@ -37,7 +37,7 @@ enum AIAction: String, CaseIterable {
 }
 
 enum AIService {
-    private static let model = "claude-3-5-haiku-20241022"
+    private static let model = "claude-haiku-3-5-20241022"
     private static let apiURL = URL(string: "https://api.anthropic.com/v1/messages")!
 
     static func perform(
