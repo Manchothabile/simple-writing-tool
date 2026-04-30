@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0DC8E3CDAD90C21EAC4E3E3B /* DocumentManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BC72391FA86CE8041DE567 /* DocumentManagerTests.swift */; };
 		356A8B5A6C93680F3AE9CDA1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E75AFF771B148AE30291ED /* ContentView.swift */; };
 		4210E0B69D18F61D13564A72 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197FAE97F5FBA85EA8DCECB2 /* KeychainHelper.swift */; };
 		5D153ACF0E4CEE3F29E565C5 /* MacTextEditorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BFDBB7C71AAECFC5035FDD /* MacTextEditorApp.swift */; };
 		69BECEEF8805955A1B8BB935 /* KeychainHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D7FD146BD6E1C3B05B34D7 /* KeychainHelperTests.swift */; };
 		B178E4B20D666B77CCC47F24 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3EBA0A51EFBB567A943BAE6A /* ZIPFoundation */; };
 		C8E21383DD31DD85F71CAD73 /* MacTextEditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78435555F5E95272B59AF0C /* MacTextEditorTests.swift */; };
+		E957A1865E1A86295BD35A6F /* DocumentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA98971A74F9EC01F218919 /* DocumentManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +34,8 @@
 		48BFDBB7C71AAECFC5035FDD /* MacTextEditorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTextEditorApp.swift; sourceTree = "<group>"; };
 		ADB276C94F8EE860BCBAA50D /* MacTextEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacTextEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8E75AFF771B148AE30291ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D0BC72391FA86CE8041DE567 /* DocumentManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentManagerTests.swift; sourceTree = "<group>"; };
+		EBA98971A74F9EC01F218919 /* DocumentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentManager.swift; sourceTree = "<group>"; };
 		F78435555F5E95272B59AF0C /* MacTextEditorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTextEditorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -50,6 +54,7 @@
 		59E8E4FBCBFB31508CAD03DA /* MacTextEditorTests */ = {
 			isa = PBXGroup;
 			children = (
+				D0BC72391FA86CE8041DE567 /* DocumentManagerTests.swift */,
 				27D7FD146BD6E1C3B05B34D7 /* KeychainHelperTests.swift */,
 				F78435555F5E95272B59AF0C /* MacTextEditorTests.swift */,
 			);
@@ -87,6 +92,7 @@
 		E0E066275204BDAFB410DE66 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				EBA98971A74F9EC01F218919 /* DocumentManager.swift */,
 				197FAE97F5FBA85EA8DCECB2 /* KeychainHelper.swift */,
 			);
 			path = Services;
@@ -172,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				356A8B5A6C93680F3AE9CDA1 /* ContentView.swift in Sources */,
+				E957A1865E1A86295BD35A6F /* DocumentManager.swift in Sources */,
 				4210E0B69D18F61D13564A72 /* KeychainHelper.swift in Sources */,
 				5D153ACF0E4CEE3F29E565C5 /* MacTextEditorApp.swift in Sources */,
 			);
@@ -181,6 +188,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DC8E3CDAD90C21EAC4E3E3B /* DocumentManagerTests.swift in Sources */,
 				69BECEEF8805955A1B8BB935 /* KeychainHelperTests.swift in Sources */,
 				C8E21383DD31DD85F71CAD73 /* MacTextEditorTests.swift in Sources */,
 			);
