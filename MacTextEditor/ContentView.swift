@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var apiKey = KeychainHelper.load(account: KeychainHelper.apiKeyAccount) ?? ""
     @State private var isAILoading = false
     @State private var aiErrorMessage: String?
+    @State private var aiHistory: [AIHistoryEntry] = []
     @State private var documentName: String = "Sans titre"
     @State private var showUnsavedAlert = false
     @State private var pendingAction: (() -> Void)?
@@ -47,7 +48,9 @@ struct ContentView: View {
                         isLoading: $isAILoading,
                         errorMessage: aiErrorMessage,
                         onAction: performAIAction,
-                        onCustomPrompt: performCustomPrompt
+                        onCustomPrompt: performCustomPrompt,
+                        history: aiHistory,
+                        onRevert: revertToHistoryEntry
                     )
                     .task(id: apiKey) {
                         if apiKey.isEmpty {
@@ -129,6 +132,7 @@ struct ContentView: View {
         let text = editorController.selectedText() ?? editorController.fullText()
         guard !text.isEmpty else { return }
 
+        let beforeState = editorController.attributedString()
         isAILoading = true
         aiErrorMessage = nil
 
@@ -139,6 +143,7 @@ struct ContentView: View {
             do {
                 let result = try await AIService.perform(action, on: text, apiKey: apiKey)
                 await MainActor.run {
+                    aiHistory.append(AIHistoryEntry(label: action.label, beforeState: beforeState))
                     if action == .continuer {
                         editorController.insertAtEnd("\n" + result)
                     } else {
@@ -164,6 +169,7 @@ struct ContentView: View {
         let text = editorController.selectedText() ?? editorController.fullText()
         guard !text.isEmpty else { return }
 
+        let beforeState = editorController.attributedString()
         isAILoading = true
         aiErrorMessage = nil
 
@@ -174,6 +180,8 @@ struct ContentView: View {
             do {
                 let result = try await AIService.performCustom(prompt: prompt, on: text, apiKey: apiKey)
                 await MainActor.run {
+                    let label = prompt.count > 40 ? String(prompt.prefix(40)) + "…" : prompt
+                    aiHistory.append(AIHistoryEntry(label: label, beforeState: beforeState))
                     editorController.replaceSelection(with: result)
                 }
             } catch AIError.invalidAPIKey {
@@ -188,6 +196,13 @@ struct ContentView: View {
                 print("[ContentView] Custom prompt error: \(error)")
                 await MainActor.run { aiErrorMessage = "Erreur : \(error.localizedDescription)" }
             }
+        }
+    }
+
+    private func revertToHistoryEntry(_ entry: AIHistoryEntry) {
+        editorController.setAttributedString(entry.beforeState)
+        if let idx = aiHistory.firstIndex(where: { $0.id == entry.id }) {
+            aiHistory.removeSubrange(idx...)
         }
     }
 

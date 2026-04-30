@@ -27,14 +27,36 @@ final class RichTextEditorController: ObservableObject {
         hasUnsavedChanges = false
     }
 
-    func replaceSelection(with text: String) {
-        guard let tv = textView else { return }
+    @discardableResult
+    func replaceSelection(with text: String) -> NSRange {
+        guard let tv = textView else { return NSRange(location: 0, length: 0) }
+        let insertLocation = tv.selectedRange().location
         tv.insertText(text, replacementRange: tv.selectedRange())
+        let inserted = NSRange(location: insertLocation, length: (text as NSString).length)
+        highlightRange(inserted)
+        return inserted
     }
 
-    func insertAtEnd(_ text: String) {
-        guard let tv = textView, let storage = tv.textStorage else { return }
-        tv.insertText(text, replacementRange: NSRange(location: storage.length, length: 0))
+    @discardableResult
+    func insertAtEnd(_ text: String) -> NSRange {
+        guard let tv = textView, let storage = tv.textStorage else { return NSRange(location: 0, length: 0) }
+        let insertLocation = storage.length
+        tv.insertText(text, replacementRange: NSRange(location: insertLocation, length: 0))
+        let inserted = NSRange(location: insertLocation, length: (text as NSString).length)
+        highlightRange(inserted)
+        return inserted
+    }
+
+    func highlightRange(_ range: NSRange, duration: TimeInterval = 2.5) {
+        guard let tv = textView, let lm = tv.layoutManager, range.length > 0 else { return }
+        lm.setTemporaryAttributes(
+            [.backgroundColor: NSColor.systemYellow.withAlphaComponent(0.4)],
+            forCharacterRange: range
+        )
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
+            guard let tv = self?.textView, let lm = tv.layoutManager else { return }
+            lm.removeTemporaryAttribute(.backgroundColor, forCharacterRange: range)
+        }
     }
 
     // MARK: - Formatting

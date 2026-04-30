@@ -1,11 +1,19 @@
 import SwiftUI
 
+struct AIHistoryEntry: Identifiable {
+    let id = UUID()
+    let label: String
+    let beforeState: NSAttributedString
+}
+
 struct AIPanel: View {
     @Binding var apiKey: String
     @Binding var isLoading: Bool
     var errorMessage: String?
     var onAction: (AIAction) -> Void
     var onCustomPrompt: (String) -> Void
+    var history: [AIHistoryEntry]
+    var onRevert: (AIHistoryEntry) -> Void
 
     @State private var customPrompt = ""
 
@@ -68,6 +76,38 @@ struct AIPanel: View {
                     ProgressView().scaleEffect(0.7)
                     Text("En cours…").font(.caption2).foregroundColor(.secondary)
                 }
+            }
+
+            if !history.isEmpty {
+                Divider()
+
+                Text("Historique")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 4) {
+                        ForEach(history.reversed()) { entry in
+                            Button(action: { onRevert(entry) }) {
+                                HStack {
+                                    Image(systemName: "arrow.uturn.backward")
+                                        .font(.caption2)
+                                    Text(entry.label)
+                                        .font(.caption2)
+                                        .lineLimit(2)
+                                        .multilineTextAlignment(.leading)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .padding(.vertical, 4)
+                                .padding(.horizontal, 6)
+                                .background(Color.primary.opacity(0.05))
+                                .cornerRadius(5)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+                .frame(maxHeight: 140)
             }
 
             Spacer()

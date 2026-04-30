@@ -25,7 +25,7 @@ enum AIAction: String, CaseIterable {
         case .reformuler:
             return "Tu es un rédacteur professionnel. Reformule le texte en conservant le sens mais avec d'autres tournures. Réponds uniquement avec le texte reformulé, sans commentaire."
         case .continuer:
-            return "Tu es un assistant d'écriture. Continue le texte de manière naturelle et cohérente avec le style existant. Génère environ un paragraphe. Réponds uniquement avec la continuation, sans répéter le texte original."
+            return "Tu es un assistant d'écriture créative. Continue le texte fourni de façon cohérente avec son style, son ton et sa narration. S'il s'agit d'une fiction, reste dans l'univers fictif et fais avancer l'histoire — ne donne jamais de conseils pratiques ou réels. Génère environ un paragraphe. Réponds uniquement avec la continuation, sans répéter le texte original."
         case .resumer:
             return "Tu es un assistant d'écriture. Produis un résumé concis du texte. Réponds uniquement avec le résumé, sans commentaire."
         case .proposer:
@@ -99,7 +99,7 @@ enum AIService {
         apiKey: String,
         session: URLSession = .shared
     ) async throws -> String {
-        let systemPrompt = "Tu es un assistant d'écriture. L'utilisateur te fournit un texte et une instruction. Applique l'instruction au texte. Réponds uniquement avec le texte résultant, sans commentaire."
+        let systemPrompt = "Tu es un assistant d'écriture créative. L'utilisateur te fournit un texte (qui peut être une fiction, un récit, une histoire) et une instruction. Applique l'instruction au texte en respectant son univers, son ton et sa narration — si le texte est une fiction, reste dans la fiction. Réponds uniquement avec le texte résultant, sans commentaire."
         let userMessage = "Texte :\n\(text)\n\nInstruction : \(prompt)"
 
         var request = URLRequest(url: apiURL)
