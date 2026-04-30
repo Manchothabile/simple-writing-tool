@@ -14,8 +14,11 @@ struct AIPanel: View {
     var onCustomPrompt: (String) -> Void
     var history: [AIHistoryEntry]
     var onRevert: (AIHistoryEntry) -> Void
+    var lang: AppLanguage
 
     @State private var customPrompt = ""
+
+    private var s: Strings { Strings(lang.rawValue) }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -24,7 +27,7 @@ struct AIPanel: View {
                 .foregroundColor(.secondary)
                 .padding(.top, 8)
 
-            SecureField("Clé API Anthropic", text: $apiKey)
+            SecureField(s.apiKeyPlaceholder, text: $apiKey)
                 .textFieldStyle(.roundedBorder)
                 .font(.caption)
 
@@ -39,7 +42,7 @@ struct AIPanel: View {
 
             ForEach(AIAction.allCases, id: \.self) { action in
                 Button(action: { onAction(action) }) {
-                    Text(action.label)
+                    Text(action.label(in: lang))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)
@@ -52,11 +55,11 @@ struct AIPanel: View {
 
             Divider()
 
-            Text("Demande libre")
+            Text(s.freePromptLabel)
                 .font(.caption2)
                 .foregroundColor(.secondary)
 
-            TextField("Ex: traduis en anglais…", text: $customPrompt, axis: .vertical)
+            TextField(s.freePromptPlaceholder, text: $customPrompt, axis: .vertical)
                 .textFieldStyle(.roundedBorder)
                 .font(.caption)
                 .lineLimit(3...6)
@@ -64,7 +67,7 @@ struct AIPanel: View {
                 .onSubmit { sendCustomPrompt() }
 
             Button(action: sendCustomPrompt) {
-                Text("Envoyer")
+                Text(s.sendButton)
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
@@ -74,14 +77,14 @@ struct AIPanel: View {
             if isLoading {
                 HStack {
                     ProgressView().scaleEffect(0.7)
-                    Text("En cours…").font(.caption2).foregroundColor(.secondary)
+                    Text(s.loadingLabel).font(.caption2).foregroundColor(.secondary)
                 }
             }
 
             if !history.isEmpty {
                 Divider()
 
-                Text("Historique")
+                Text(s.historyLabel)
                     .font(.caption2)
                     .foregroundColor(.secondary)
 

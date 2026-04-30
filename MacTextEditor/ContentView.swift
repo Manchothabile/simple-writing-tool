@@ -12,19 +12,24 @@ struct ContentView: View {
     @State private var documentName: String = "Sans titre"
     @State private var showUnsavedAlert = false
     @State private var pendingAction: (() -> Void)?
+    @AppStorage("lang") private var langRaw: String = "fr"
+
+    private var lang: AppLanguage { AppLanguage(rawValue: langRaw) ?? .fr }
+    private var s: Strings { Strings(langRaw) }
 
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
                 FormattingToolbar(
                     controller: editorController,
+                    lang: lang,
                     onNew: confirmIfUnsaved(then: newDocument),
                     onOpen: confirmIfUnsaved(then: openDocument),
                     onSaveAs: saveAsDocument
                 )
                 Toggle(isOn: $showAIPanel) {
                     Image(systemName: "sparkles")
-                        .help("Activer l'assistant IA")
+                        .help(lang == .en ? "AI assistant" : "Activer l'assistant IA")
                 }
                 .toggleStyle(.button)
                 .padding(.trailing, 12)
@@ -50,7 +55,8 @@ struct ContentView: View {
                         onAction: performAIAction,
                         onCustomPrompt: performCustomPrompt,
                         history: aiHistory,
-                        onRevert: revertToHistoryEntry
+                        onRevert: revertToHistoryEntry,
+                        lang: lang
                     )
                     .task(id: apiKey) {
                         if apiKey.isEmpty {
@@ -63,14 +69,14 @@ struct ContentView: View {
             }
         }
         .navigationTitle(documentName + (editorController.hasUnsavedChanges ? " ●" : ""))
-        .alert("Document non sauvegardé", isPresented: $showUnsavedAlert) {
-            Button("Abandonner les modifications", role: .destructive) {
+        .alert(s.unsavedTitle, isPresented: $showUnsavedAlert) {
+            Button(s.discardButton, role: .destructive) {
                 pendingAction?()
                 pendingAction = nil
             }
-            Button("Annuler", role: .cancel) { pendingAction = nil }
+            Button(s.cancelButton, role: .cancel) { pendingAction = nil }
         } message: {
-            Text("Les modifications non sauvegardées seront perdues.")
+            Text(s.unsavedMessage)
         }
     }
 
@@ -78,7 +84,7 @@ struct ContentView: View {
 
     private func newDocument() {
         editorController.setAttributedString(NSAttributedString())
-        documentName = "Sans titre"
+        documentName = lang == .en ? "Untitled" : "Sans titre"
     }
 
     private func openDocument() {
@@ -91,7 +97,7 @@ struct ContentView: View {
         guard let format = DocumentFormat(rawValue: ext),
               let data = try? Data(contentsOf: url),
               let attrStr = try? DocumentManager.importFile(data: data, format: format) else {
-            showNSAlert("Impossible d'ouvrir ce fichier.")
+            showNSAlert(s.errorOpenFile)
             return
         }
         editorController.setAttributedString(attrStr)
@@ -107,7 +113,7 @@ struct ContentView: View {
         let ext = url.pathExtension.lowercased()
         guard let format = DocumentFormat(rawValue: ext),
               let data = try? DocumentManager.export(editorController.attributedString(), as: format) else {
-            showNSAlert("Impossible d'enregistrer le fichier.")
+            showNSAlert(s.errorSaveFile)
             return
         }
         try? data.write(to: url)
@@ -141,9 +147,9 @@ struct ContentView: View {
                 Task { @MainActor in isAILoading = false }
             }
             do {
-                let result = try await AIService.perform(action, on: text, apiKey: apiKey)
+                let result = try await AIService.perform(action, on: text, apiKey: apiKey, language: lang)
                 await MainActor.run {
-                    aiHistory.append(AIHistoryEntry(label: action.label, beforeState: beforeState))
+                    aiHistory.append(AIHistoryEntry(label: action.label(in: lang), beforeState: beforeState))
                     if action == .continuer {
                         editorController.insertAtEnd("\n" + result)
                     } else {
@@ -151,16 +157,16 @@ struct ContentView: View {
                     }
                 }
             } catch AIError.invalidAPIKey {
-                await MainActor.run { aiErrorMessage = "Clé API invalide." }
+                await MainActor.run { aiErrorMessage = s.errorInvalidKey }
             } catch AIError.networkError {
-                await MainActor.run { aiErrorMessage = "Erreur réseau. Vérifiez votre connexion." }
+                await MainActor.run { aiErrorMessage = s.errorNetwork }
             } catch AIError.emptyResponse {
-                await MainActor.run { aiErrorMessage = "Réponse vide de l'API." }
+                await MainActor.run { aiErrorMessage = s.errorEmpty }
             } catch AIError.serverError(let code) {
-                await MainActor.run { aiErrorMessage = "Erreur serveur (\(code)). Vérifiez la console." }
+                await MainActor.run { aiErrorMessage = s.errorServer(code) }
             } catch {
                 print("[ContentView] Unexpected error: \(error)")
-                await MainActor.run { aiErrorMessage = "Erreur : \(error.localizedDescription)" }
+                await MainActor.run { aiErrorMessage = s.errorServer(-1) }
             }
         }
     }
@@ -178,23 +184,23 @@ struct ContentView: View {
                 Task { @MainActor in isAILoading = false }
             }
             do {
-                let result = try await AIService.performCustom(prompt: prompt, on: text, apiKey: apiKey)
+                let result = try await AIService.performCustom(prompt: prompt, on: text, apiKey: apiKey, language: lang)
                 await MainActor.run {
                     let label = prompt.count > 40 ? String(prompt.prefix(40)) + "…" : prompt
                     aiHistory.append(AIHistoryEntry(label: label, beforeState: beforeState))
                     editorController.replaceSelection(with: result)
                 }
             } catch AIError.invalidAPIKey {
-                await MainActor.run { aiErrorMessage = "Clé API invalide." }
+                await MainActor.run { aiErrorMessage = s.errorInvalidKey }
             } catch AIError.networkError {
-                await MainActor.run { aiErrorMessage = "Erreur réseau. Vérifiez votre connexion." }
+                await MainActor.run { aiErrorMessage = s.errorNetwork }
             } catch AIError.emptyResponse {
-                await MainActor.run { aiErrorMessage = "Réponse vide de l'API." }
+                await MainActor.run { aiErrorMessage = s.errorEmpty }
             } catch AIError.serverError(let code) {
-                await MainActor.run { aiErrorMessage = "Erreur serveur (\(code))." }
+                await MainActor.run { aiErrorMessage = s.errorServer(code) }
             } catch {
                 print("[ContentView] Custom prompt error: \(error)")
-                await MainActor.run { aiErrorMessage = "Erreur : \(error.localizedDescription)" }
+                await MainActor.run { aiErrorMessage = s.errorServer(-1) }
             }
         }
     }
