@@ -1,0 +1,32 @@
+name: MacTextEditor
+options:
+  bundleIdPrefix: com.nicolas
+  deploymentTarget:
+    macOS: "13.0"
+packages:
+  ZIPFoundation:
+    url: https://github.com/weichsel/ZIPFoundation.git
+    from: "0.9.19"
+targets:
+  MacTextEditor:
+    type: application
+    platform: macOS
+    sources: [MacTextEditor]
+    dependencies:
+      - package: ZIPFoundation
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
+        ENABLE_APP_SANDBOX: NO
+        PRODUCT_BUNDLE_IDENTIFIER: com.nicolas.MacTextEditor
+  MacTextEditorTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [MacTextEditorTests]
+    dependencies:
+      - target: MacTextEditor
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
