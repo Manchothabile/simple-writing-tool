@@ -23,6 +23,8 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         MARKETING_VERSION: "0.1.0"
         CURRENT_PROJECT_VERSION: "1"
+        PRODUCT_NAME: "Simple Writing Tool"
+        PRODUCT_BUNDLE_IDENTIFIER: com.nicolas.SimpleWritingTool
   MacTextEditorTests:
     type: bundle.unit-test
     platform: macOS

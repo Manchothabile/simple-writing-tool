@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build archive
+        run: |
+          xcodebuild archive \
+            -scheme MacTextEditor \
+            -configuration Release \
+            -archivePath build/SimpleWritingTool.xcarchive \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Export app
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath build/SimpleWritingTool.xcarchive \
+            -exportPath build/export \
+            -exportOptionsPlist ExportOptions.plist \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Zip app
+        run: |
+          cd build/export
+          zip -r "Simple Writing Tool.zip" "Simple Writing Tool.app"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "build/export/Simple Writing Tool.zip"
+          body: |
+            ## Simple Writing Tool ${{ github.ref_name }}
+
+            ### Installation
+            1. Télécharger `Simple Writing Tool.zip` et décompresser
+            2. **Clic droit → Ouvrir** (première fois seulement — app non notarisée)
+            3. Entrer votre clé API Anthropic dans le panel IA ✦
