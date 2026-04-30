@@ -148,8 +148,13 @@ struct ContentView: View {
                 await MainActor.run { aiErrorMessage = "Clé API invalide." }
             } catch AIError.networkError {
                 await MainActor.run { aiErrorMessage = "Erreur réseau. Vérifiez votre connexion." }
+            } catch AIError.emptyResponse {
+                await MainActor.run { aiErrorMessage = "Réponse vide de l'API." }
+            } catch AIError.serverError(let code) {
+                await MainActor.run { aiErrorMessage = "Erreur serveur (\(code)). Vérifiez la console." }
             } catch {
-                await MainActor.run { aiErrorMessage = "Erreur inattendue." }
+                print("[ContentView] Unexpected error: \(error)")
+                await MainActor.run { aiErrorMessage = "Erreur : \(error.localizedDescription)" }
             }
         }
     }

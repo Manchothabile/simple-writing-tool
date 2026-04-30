@@ -69,6 +69,11 @@ enum AIService {
 
         guard let http = response as? HTTPURLResponse else { throw AIError.networkError }
 
+        print("[AIService] HTTP \(http.statusCode)")
+        if let body = String(data: data, encoding: .utf8) {
+            print("[AIService] Response: \(body)")
+        }
+
         if http.statusCode == 401 { throw AIError.invalidAPIKey }
         guard http.statusCode == 200 else { throw AIError.serverError(http.statusCode) }
 
@@ -76,10 +81,15 @@ enum AIService {
             struct Content: Decodable { let type: String; let text: String }
             let content: [Content]
         }
-        let decoded = try JSONDecoder().decode(Response.self, from: data)
-        guard let first = decoded.content.first(where: { $0.type == "text" }) else {
+        do {
+            let decoded = try JSONDecoder().decode(Response.self, from: data)
+            guard let first = decoded.content.first(where: { $0.type == "text" }) else {
+                throw AIError.emptyResponse
+            }
+            return first.text
+        } catch let decodeError as DecodingError {
+            print("[AIService] Decode error: \(decodeError)")
             throw AIError.emptyResponse
         }
-        return first.text
     }
 }
