@@ -26,18 +26,25 @@ jobs:
             -configuration Release \
             -archivePath build/SimpleWritingTool.xcarchive \
             CODE_SIGN_IDENTITY="-" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_REQUIRED=YES \
+            OTHER_CODE_SIGN_FLAGS="--deep"
 
       - name: Export app
         run: |
           xcodebuild -exportArchive \
             -archivePath build/SimpleWritingTool.xcarchive \
             -exportPath build/export \
-            -exportOptionsPlist ExportOptions.plist \
-            CODE_SIGN_IDENTITY="-" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            -exportOptionsPlist ExportOptions.plist
+
+      - name: Ad-hoc sign
+        run: |
+          codesign --force --deep --sign - \
+            "build/export/Simple Writing Tool.app"
+
+      - name: Verify signature
+        run: |
+          codesign --verify --verbose \
+            "build/export/Simple Writing Tool.app"
 
       - name: Zip app
         run: |
@@ -53,5 +60,6 @@ jobs:
 
             ### Installation
             1. Télécharger `Simple Writing Tool.zip` et décompresser
-            2. **Clic droit → Ouvrir** (première fois seulement — app non notarisée)
-            3. Entrer votre clé API Anthropic dans le panel IA ✦
+            2. Déplacer `Simple Writing Tool.app` dans le dossier Applications
+            3. **Clic droit → Ouvrir** la première fois (app non notarisée)
+            4. Entrer votre clé API Anthropic dans le panel IA ✦

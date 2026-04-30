@@ -6,7 +6,5 @@
     <string>mac-application</string>
     <key>signingStyle</key>
     <string>manual</string>
-    <key>signingCertificate</key>
-    <string>-</string>
 </dict>
 </plist>
