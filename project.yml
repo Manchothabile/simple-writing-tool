@@ -20,6 +20,7 @@ targets:
         MACOSX_DEPLOYMENT_TARGET: "13.0"
         ENABLE_APP_SANDBOX: NO
         PRODUCT_BUNDLE_IDENTIFIER: com.nicolas.MacTextEditor
+        GENERATE_INFOPLIST_FILE: YES
   MacTextEditorTests:
     type: bundle.unit-test
     platform: macOS
