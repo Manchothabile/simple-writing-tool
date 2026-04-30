@@ -14,8 +14,10 @@
 		69BECEEF8805955A1B8BB935 /* KeychainHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D7FD146BD6E1C3B05B34D7 /* KeychainHelperTests.swift */; };
 		B178E4B20D666B77CCC47F24 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3EBA0A51EFBB567A943BAE6A /* ZIPFoundation */; };
 		C8E21383DD31DD85F71CAD73 /* MacTextEditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78435555F5E95272B59AF0C /* MacTextEditorTests.swift */; };
+		D017A711F26CD06FF113EA87 /* RichTextEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41370128A6505931F0F33137 /* RichTextEditorController.swift */; };
 		D0EA66B9E220EF621FF7F65C /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15B8B5B9354E6AEE4EB8109 /* AIService.swift */; };
 		E957A1865E1A86295BD35A6F /* DocumentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA98971A74F9EC01F218919 /* DocumentManager.swift */; };
+		F04DE22C46D75B3F6FA4F482 /* RichTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9775687C176C4F9C6500E56C /* RichTextEditor.swift */; };
 		FAF8A1DF01A2AC506EA4BAE0 /* AIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C76C9038FD16C3A6E5063AA /* AIServiceTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,8 +35,10 @@
 		197FAE97F5FBA85EA8DCECB2 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		27D7FD146BD6E1C3B05B34D7 /* KeychainHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelperTests.swift; sourceTree = "<group>"; };
 		3CF5A8ED5D18E80A6E428399 /* MacTextEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacTextEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		41370128A6505931F0F33137 /* RichTextEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditorController.swift; sourceTree = "<group>"; };
 		48BFDBB7C71AAECFC5035FDD /* MacTextEditorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTextEditorApp.swift; sourceTree = "<group>"; };
 		5C76C9038FD16C3A6E5063AA /* AIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIServiceTests.swift; sourceTree = "<group>"; };
+		9775687C176C4F9C6500E56C /* RichTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditor.swift; sourceTree = "<group>"; };
 		A15B8B5B9354E6AEE4EB8109 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
 		ADB276C94F8EE860BCBAA50D /* MacTextEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacTextEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8E75AFF771B148AE30291ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -81,8 +85,18 @@
 				C8E75AFF771B148AE30291ED /* ContentView.swift */,
 				48BFDBB7C71AAECFC5035FDD /* MacTextEditorApp.swift */,
 				E0E066275204BDAFB410DE66 /* Services */,
+				AC35E2C323F16BDB505A3AD3 /* Views */,
 			);
 			path = MacTextEditor;
+			sourceTree = "<group>";
+		};
+		AC35E2C323F16BDB505A3AD3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9775687C176C4F9C6500E56C /* RichTextEditor.swift */,
+				41370128A6505931F0F33137 /* RichTextEditorController.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		B7323E305CBE68B45DD9FB86 = {
@@ -188,6 +202,8 @@
 				E957A1865E1A86295BD35A6F /* DocumentManager.swift in Sources */,
 				4210E0B69D18F61D13564A72 /* KeychainHelper.swift in Sources */,
 				5D153ACF0E4CEE3F29E565C5 /* MacTextEditorApp.swift in Sources */,
+				F04DE22C46D75B3F6FA4F482 /* RichTextEditor.swift in Sources */,
+				D017A711F26CD06FF113EA87 /* RichTextEditorController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
