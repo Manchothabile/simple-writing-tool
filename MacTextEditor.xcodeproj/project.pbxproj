@@ -14,7 +14,9 @@
 		69BECEEF8805955A1B8BB935 /* KeychainHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D7FD146BD6E1C3B05B34D7 /* KeychainHelperTests.swift */; };
 		B178E4B20D666B77CCC47F24 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3EBA0A51EFBB567A943BAE6A /* ZIPFoundation */; };
 		C8E21383DD31DD85F71CAD73 /* MacTextEditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78435555F5E95272B59AF0C /* MacTextEditorTests.swift */; };
+		D0EA66B9E220EF621FF7F65C /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15B8B5B9354E6AEE4EB8109 /* AIService.swift */; };
 		E957A1865E1A86295BD35A6F /* DocumentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA98971A74F9EC01F218919 /* DocumentManager.swift */; };
+		FAF8A1DF01A2AC506EA4BAE0 /* AIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C76C9038FD16C3A6E5063AA /* AIServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +34,8 @@
 		27D7FD146BD6E1C3B05B34D7 /* KeychainHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelperTests.swift; sourceTree = "<group>"; };
 		3CF5A8ED5D18E80A6E428399 /* MacTextEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacTextEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		48BFDBB7C71AAECFC5035FDD /* MacTextEditorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTextEditorApp.swift; sourceTree = "<group>"; };
+		5C76C9038FD16C3A6E5063AA /* AIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIServiceTests.swift; sourceTree = "<group>"; };
+		A15B8B5B9354E6AEE4EB8109 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
 		ADB276C94F8EE860BCBAA50D /* MacTextEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacTextEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8E75AFF771B148AE30291ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D0BC72391FA86CE8041DE567 /* DocumentManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentManagerTests.swift; sourceTree = "<group>"; };
@@ -54,6 +58,7 @@
 		59E8E4FBCBFB31508CAD03DA /* MacTextEditorTests */ = {
 			isa = PBXGroup;
 			children = (
+				5C76C9038FD16C3A6E5063AA /* AIServiceTests.swift */,
 				D0BC72391FA86CE8041DE567 /* DocumentManagerTests.swift */,
 				27D7FD146BD6E1C3B05B34D7 /* KeychainHelperTests.swift */,
 				F78435555F5E95272B59AF0C /* MacTextEditorTests.swift */,
@@ -92,6 +97,7 @@
 		E0E066275204BDAFB410DE66 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				A15B8B5B9354E6AEE4EB8109 /* AIService.swift */,
 				EBA98971A74F9EC01F218919 /* DocumentManager.swift */,
 				197FAE97F5FBA85EA8DCECB2 /* KeychainHelper.swift */,
 			);
@@ -177,6 +183,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0EA66B9E220EF621FF7F65C /* AIService.swift in Sources */,
 				356A8B5A6C93680F3AE9CDA1 /* ContentView.swift in Sources */,
 				E957A1865E1A86295BD35A6F /* DocumentManager.swift in Sources */,
 				4210E0B69D18F61D13564A72 /* KeychainHelper.swift in Sources */,
@@ -188,6 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAF8A1DF01A2AC506EA4BAE0 /* AIServiceTests.swift in Sources */,
 				0DC8E3CDAD90C21EAC4E3E3B /* DocumentManagerTests.swift in Sources */,
 				69BECEEF8805955A1B8BB935 /* KeychainHelperTests.swift in Sources */,
 				C8E21383DD31DD85F71CAD73 /* MacTextEditorTests.swift in Sources */,
