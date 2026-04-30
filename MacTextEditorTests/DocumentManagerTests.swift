@@ -1,6 +1,7 @@
 import XCTest
 import AppKit
 @testable import MacTextEditor
+import ZIPFoundation
 
 final class DocumentManagerTests: XCTestCase {
 
@@ -28,5 +29,34 @@ final class DocumentManagerTests: XCTestCase {
         let data = try DocumentManager.export(original, as: .txt)
         let str = String(data: data, encoding: .utf8)
         XCTAssertEqual(str, "Styled text")
+    }
+
+    func test_docx_produces_data() throws {
+        let original = NSAttributedString(string: "Hello docx")
+        let data = try DocumentManager.export(original, as: .docx)
+        XCTAssertGreaterThan(data.count, 0)
+    }
+
+    func test_docx_is_valid_zip() throws {
+        let original = NSAttributedString(string: "Test content")
+        let data = try DocumentManager.export(original, as: .docx)
+        let magic = data.prefix(2)
+        XCTAssertEqual(magic, Data([0x50, 0x4B]))
+    }
+
+    func test_docx_contains_text() throws {
+        let original = NSAttributedString(string: "Unique marker 42")
+        let data = try DocumentManager.export(original, as: .docx)
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString + ".docx")
+        try data.write(to: tempURL)
+        let unzipDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: unzipDir, withIntermediateDirectories: true)
+        try FileManager.default.unzipItem(at: tempURL, to: unzipDir)
+        let docXML = try String(contentsOf: unzipDir.appendingPathComponent("word/document.xml"))
+        XCTAssertTrue(docXML.contains("Unique marker 42"))
+        try? FileManager.default.removeItem(at: tempURL)
+        try? FileManager.default.removeItem(at: unzipDir)
     }
 }
