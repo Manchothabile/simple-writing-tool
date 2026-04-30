@@ -65,6 +65,13 @@ struct FormattingToolbar: View {
 
             Divider().frame(height: 20)
 
+            Button(action: controller.cleanupFormatting) {
+                Image(systemName: "paragraphsign").frame(width: 24, height: 24)
+            }
+            .help("Nettoyer la mise en forme")
+
+            Divider().frame(height: 20)
+
             Button(action: onNew) {
                 Image(systemName: "doc").frame(width: 24, height: 24)
             }

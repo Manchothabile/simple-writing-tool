@@ -86,6 +86,22 @@ final class RichTextEditorController: ObservableObject {
         tv.setAlignment(alignment, range: tv.selectedRange())
     }
 
+    func cleanupFormatting() {
+        guard let storage = textView?.textStorage else { return }
+        let patterns: [(String, String)] = [
+            ("[ \\t]+\\n", "\n"),   // trailing whitespace before newline
+            ("\\n{3,}", "\n\n"),    // 3+ consecutive newlines → 2
+        ]
+        for (pattern, replacement) in patterns {
+            guard let regex = try? NSRegularExpression(pattern: pattern) else { continue }
+            let matches = regex.matches(in: storage.string, range: NSRange(location: 0, length: storage.length)).reversed()
+            for match in matches {
+                storage.replaceCharacters(in: match.range, with: replacement)
+            }
+        }
+        hasUnsavedChanges = true
+    }
+
     func markUnsaved() { hasUnsavedChanges = true }
 
     // MARK: - Font size

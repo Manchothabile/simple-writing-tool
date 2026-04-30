@@ -5,7 +5,7 @@ enum AIError: Error {
 }
 
 enum AIAction: String, CaseIterable {
-    case corriger, reformuler, continuer, resumer, proposer, raccourcir
+    case corriger, reformuler, continuer, resumer, proposer, raccourcir, formater
 
     var label: String {
         switch self {
@@ -15,6 +15,7 @@ enum AIAction: String, CaseIterable {
         case .resumer: return "Résumer"
         case .proposer: return "Proposer"
         case .raccourcir: return "Raccourcir"
+        case .formater: return "Formater"
         }
     }
 
@@ -32,6 +33,8 @@ enum AIAction: String, CaseIterable {
             return "Tu es un assistant d'écriture. Propose une formulation alternative du texte, différente dans la forme mais identique dans le sens. Réponds uniquement avec la proposition, sans commentaire."
         case .raccourcir:
             return "Tu es un assistant d'écriture. Condense le texte d'environ 40% en conservant les idées principales. Réponds uniquement avec le texte condensé, sans commentaire."
+        case .formater:
+            return "Tu es un assistant d'écriture. Restructure le texte en paragraphes bien formés : regroupe les phrases liées, ajoute des sauts de paragraphe là où le sens l'exige, supprime les sauts de ligne superflus. Ne modifie pas le contenu ni le style. Réponds uniquement avec le texte reformaté, sans commentaire."
         }
     }
 }

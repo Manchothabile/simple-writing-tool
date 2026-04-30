@@ -21,6 +21,8 @@ targets:
         ENABLE_APP_SANDBOX: NO
         PRODUCT_BUNDLE_IDENTIFIER: com.nicolas.MacTextEditor
         GENERATE_INFOPLIST_FILE: YES
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
   MacTextEditorTests:
     type: bundle.unit-test
     platform: macOS
