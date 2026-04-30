@@ -37,7 +37,7 @@ enum AIAction: String, CaseIterable {
 }
 
 enum AIService {
-    private static let model = "claude-haiku-3-5-20241022"
+    private static let model = "claude-haiku-4-5-20251001"
     private static let apiURL = URL(string: "https://api.anthropic.com/v1/messages")!
 
     static func perform(
@@ -89,6 +89,62 @@ enum AIService {
             return first.text
         } catch let decodeError as DecodingError {
             print("[AIService] Decode error: \(decodeError)")
+            throw AIError.emptyResponse
+        }
+    }
+
+    static func performCustom(
+        prompt: String,
+        on text: String,
+        apiKey: String,
+        session: URLSession = .shared
+    ) async throws -> String {
+        let systemPrompt = "Tu es un assistant d'écriture. L'utilisateur te fournit un texte et une instruction. Applique l'instruction au texte. Réponds uniquement avec le texte résultant, sans commentaire."
+        let userMessage = "Texte :\n\(text)\n\nInstruction : \(prompt)"
+
+        var request = URLRequest(url: apiURL)
+        request.httpMethod = "POST"
+        request.setValue(apiKey, forHTTPHeaderField: "x-api-key")
+        request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
+        request.setValue("application/json", forHTTPHeaderField: "content-type")
+
+        let body: [String: Any] = [
+            "model": model,
+            "max_tokens": 2048,
+            "system": systemPrompt,
+            "messages": [["role": "user", "content": userMessage]]
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (data, response): (Data, URLResponse)
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            throw AIError.networkError
+        }
+
+        guard let http = response as? HTTPURLResponse else { throw AIError.networkError }
+
+        print("[AIService] Custom HTTP \(http.statusCode)")
+        if http.statusCode != 200, let responseBody = String(data: data, encoding: .utf8) {
+            print("[AIService] Custom Response: \(responseBody)")
+        }
+
+        if http.statusCode == 401 { throw AIError.invalidAPIKey }
+        guard http.statusCode == 200 else { throw AIError.serverError(http.statusCode) }
+
+        struct Response: Decodable {
+            struct Content: Decodable { let type: String; let text: String }
+            let content: [Content]
+        }
+        do {
+            let decoded = try JSONDecoder().decode(Response.self, from: data)
+            guard let first = decoded.content.first(where: { $0.type == "text" }) else {
+                throw AIError.emptyResponse
+            }
+            return first.text
+        } catch let decodeError as DecodingError {
+            print("[AIService] Custom decode error: \(decodeError)")
             throw AIError.emptyResponse
         }
     }

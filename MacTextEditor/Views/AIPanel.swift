@@ -5,10 +5,13 @@ struct AIPanel: View {
     @Binding var isLoading: Bool
     var errorMessage: String?
     var onAction: (AIAction) -> Void
+    var onCustomPrompt: (String) -> Void
+
+    @State private var customPrompt = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("IA · Haiku 3.5")
+            Text("IA · Haiku 4.5")
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .padding(.top, 8)
@@ -39,6 +42,27 @@ struct AIPanel: View {
                 .disabled(isLoading || apiKey.isEmpty)
             }
 
+            Divider()
+
+            Text("Demande libre")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+
+            TextField("Ex: traduis en anglais…", text: $customPrompt, axis: .vertical)
+                .textFieldStyle(.roundedBorder)
+                .font(.caption)
+                .lineLimit(3...6)
+                .disabled(isLoading || apiKey.isEmpty)
+                .onSubmit { sendCustomPrompt() }
+
+            Button(action: sendCustomPrompt) {
+                Text("Envoyer")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.small)
+            .disabled(isLoading || apiKey.isEmpty || customPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+
             if isLoading {
                 HStack {
                     ProgressView().scaleEffect(0.7)
@@ -49,6 +73,13 @@ struct AIPanel: View {
             Spacer()
         }
         .padding(.horizontal, 12)
-        .frame(width: 200)
+        .frame(width: 220)
+    }
+
+    private func sendCustomPrompt() {
+        let trimmed = customPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        onCustomPrompt(trimmed)
+        customPrompt = ""
     }
 }

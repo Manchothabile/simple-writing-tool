@@ -46,7 +46,8 @@ struct ContentView: View {
                         apiKey: $apiKey,
                         isLoading: $isAILoading,
                         errorMessage: aiErrorMessage,
-                        onAction: performAIAction
+                        onAction: performAIAction,
+                        onCustomPrompt: performCustomPrompt
                     )
                     .task(id: apiKey) {
                         if apiKey.isEmpty {
@@ -154,6 +155,37 @@ struct ContentView: View {
                 await MainActor.run { aiErrorMessage = "Erreur serveur (\(code)). Vérifiez la console." }
             } catch {
                 print("[ContentView] Unexpected error: \(error)")
+                await MainActor.run { aiErrorMessage = "Erreur : \(error.localizedDescription)" }
+            }
+        }
+    }
+
+    private func performCustomPrompt(_ prompt: String) {
+        let text = editorController.selectedText() ?? editorController.fullText()
+        guard !text.isEmpty else { return }
+
+        isAILoading = true
+        aiErrorMessage = nil
+
+        Task {
+            defer {
+                Task { @MainActor in isAILoading = false }
+            }
+            do {
+                let result = try await AIService.performCustom(prompt: prompt, on: text, apiKey: apiKey)
+                await MainActor.run {
+                    editorController.replaceSelection(with: result)
+                }
+            } catch AIError.invalidAPIKey {
+                await MainActor.run { aiErrorMessage = "Clé API invalide." }
+            } catch AIError.networkError {
+                await MainActor.run { aiErrorMessage = "Erreur réseau. Vérifiez votre connexion." }
+            } catch AIError.emptyResponse {
+                await MainActor.run { aiErrorMessage = "Réponse vide de l'API." }
+            } catch AIError.serverError(let code) {
+                await MainActor.run { aiErrorMessage = "Erreur serveur (\(code))." }
+            } catch {
+                print("[ContentView] Custom prompt error: \(error)")
                 await MainActor.run { aiErrorMessage = "Erreur : \(error.localizedDescription)" }
             }
         }
