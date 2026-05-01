@@ -96,6 +96,10 @@ final class RichTextEditorController: ObservableObject {
             range = (tv.string as NSString).paragraphRange(for: range)
         }
         tv.setAlignment(alignment, range: range)
+        // Keep typing attributes in sync so new text follows the chosen alignment
+        let para = (tv.typingAttributes[.paragraphStyle] as? NSParagraphStyle)?.mutableCopy() as? NSMutableParagraphStyle ?? NSMutableParagraphStyle()
+        para.alignment = alignment
+        tv.typingAttributes[.paragraphStyle] = para
     }
 
     func cleanupFormatting() {

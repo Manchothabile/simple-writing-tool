@@ -1,6 +1,18 @@
 import SwiftUI
 import AppKit
 
+private struct ToolbarButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(Color.primary.opacity(configuration.isPressed ? 0.14 : 0))
+            )
+            .scaleEffect(configuration.isPressed ? 0.88 : 1.0)
+            .animation(.easeInOut(duration: 0.07), value: configuration.isPressed)
+    }
+}
+
 struct FormattingToolbar: View {
     @ObservedObject var controller: RichTextEditorController
     var lang: AppLanguage
@@ -9,6 +21,10 @@ struct FormattingToolbar: View {
     var onSaveAs: () -> Void
 
     @AppStorage("lang") private var langRaw: String = "fr"
+
+    private var version: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+    }
 
     var body: some View {
         HStack(spacing: 4) {
@@ -92,13 +108,20 @@ struct FormattingToolbar: View {
 
             Spacer()
 
+            if !version.isEmpty {
+                Text("v\(version)")
+                    .font(.system(size: 10))
+                    .foregroundColor(.secondary.opacity(0.6))
+                    .padding(.trailing, 6)
+            }
+
             Button(action: { langRaw = lang == .en ? "fr" : "en" }) {
                 Text(lang == .en ? "FR" : "EN")
                     .font(.caption)
                     .fontWeight(.medium)
                     .frame(width: 28, height: 20)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(ToolbarButtonStyle())
             .padding(.horizontal, 4)
             .background(Color.primary.opacity(0.07))
             .cornerRadius(5)
@@ -106,6 +129,6 @@ struct FormattingToolbar: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
-        .buttonStyle(.plain)
+        .buttonStyle(ToolbarButtonStyle())
     }
 }
