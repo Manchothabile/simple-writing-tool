@@ -25,6 +25,7 @@ targets:
         CURRENT_PROJECT_VERSION: "2"
         PRODUCT_NAME: "Simple Writing Tool"
         PRODUCT_BUNDLE_IDENTIFIER: com.nicolas.SimpleWritingTool
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
   MacTextEditorTests:
     type: bundle.unit-test
     platform: macOS

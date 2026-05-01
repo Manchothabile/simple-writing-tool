@@ -15,6 +15,7 @@
 		69BECEEF8805955A1B8BB935 /* KeychainHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D7FD146BD6E1C3B05B34D7 /* KeychainHelperTests.swift */; };
 		741B51D1D2633AD995C5C02F /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BDA5139BC3FD73DF4E17A0 /* AppLanguage.swift */; };
 		7ECB57B712A517DAFEA01A5F /* FormattingToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95D8D141297BB5EEC00A596 /* FormattingToolbar.swift */; };
+		986905A46BA255A658ADBF5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF4B0D9A8036DFB5DFAD13E6 /* Assets.xcassets */; };
 		B178E4B20D666B77CCC47F24 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3EBA0A51EFBB567A943BAE6A /* ZIPFoundation */; };
 		C8E21383DD31DD85F71CAD73 /* MacTextEditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78435555F5E95272B59AF0C /* MacTextEditorTests.swift */; };
 		D017A711F26CD06FF113EA87 /* RichTextEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41370128A6505931F0F33137 /* RichTextEditorController.swift */; };
@@ -45,6 +46,7 @@
 		9775687C176C4F9C6500E56C /* RichTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditor.swift; sourceTree = "<group>"; };
 		A15B8B5B9354E6AEE4EB8109 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
 		ADB276C94F8EE860BCBAA50D /* MacTextEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacTextEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF4B0D9A8036DFB5DFAD13E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C8E75AFF771B148AE30291ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D0BC72391FA86CE8041DE567 /* DocumentManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentManagerTests.swift; sourceTree = "<group>"; };
 		E95D8D141297BB5EEC00A596 /* FormattingToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingToolbar.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 		783A4D8139873CE97249F1A2 /* MacTextEditor */ = {
 			isa = PBXGroup;
 			children = (
+				AF4B0D9A8036DFB5DFAD13E6 /* Assets.xcassets */,
 				C8E75AFF771B148AE30291ED /* ContentView.swift */,
 				48BFDBB7C71AAECFC5035FDD /* MacTextEditorApp.swift */,
 				A0767CD8A11FF002A7F82018 /* Models */,
@@ -161,6 +164,7 @@
 			buildConfigurationList = ADD403AB3A42C23167F461B9 /* Build configuration list for PBXNativeTarget "MacTextEditor" */;
 			buildPhases = (
 				550104338AFA8C8853626AE7 /* Sources */,
+				20FB237A9CD838CFC5A39F5E /* Resources */,
 				6A633FC3098A67A39285B726 /* Frameworks */,
 			);
 			buildRules = (
@@ -208,6 +212,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		20FB237A9CD838CFC5A39F5E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				986905A46BA255A658ADBF5C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		550104338AFA8C8853626AE7 /* Sources */ = {
