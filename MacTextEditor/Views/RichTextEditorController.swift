@@ -72,7 +72,15 @@ final class RichTextEditorController: ObservableObject {
     func toggleUnderline() {
         guard let tv = textView else { return }
         let range = tv.selectedRange()
-        guard range.length > 0 else { return }
+        if range.length == 0 {
+            let current = tv.typingAttributes[.underlineStyle] as? Int
+            if current != nil && current != 0 {
+                tv.typingAttributes.removeValue(forKey: .underlineStyle)
+            } else {
+                tv.typingAttributes[.underlineStyle] = NSUnderlineStyle.single.rawValue
+            }
+            return
+        }
         let current = tv.textStorage?.attribute(.underlineStyle, at: range.location, effectiveRange: nil) as? Int
         if current != nil && current != 0 {
             tv.textStorage?.removeAttribute(.underlineStyle, range: range)
@@ -83,7 +91,11 @@ final class RichTextEditorController: ObservableObject {
 
     func setAlignment(_ alignment: NSTextAlignment) {
         guard let tv = textView else { return }
-        tv.setAlignment(alignment, range: tv.selectedRange())
+        var range = tv.selectedRange()
+        if range.length == 0 {
+            range = (tv.string as NSString).paragraphRange(for: range)
+        }
+        tv.setAlignment(alignment, range: range)
     }
 
     func cleanupFormatting() {
@@ -112,7 +124,12 @@ final class RichTextEditorController: ObservableObject {
     private func adjustFontSize(by delta: CGFloat) {
         guard let tv = textView else { return }
         let range = tv.selectedRange()
-        guard range.length > 0 else { return }
+        if range.length == 0 {
+            let current = (tv.typingAttributes[.font] as? NSFont) ?? NSFont.systemFont(ofSize: NSFont.systemFontSize)
+            let newFont = NSFont(descriptor: current.fontDescriptor, size: max(6, current.pointSize + delta)) ?? current
+            tv.typingAttributes[.font] = newFont
+            return
+        }
         tv.textStorage?.enumerateAttribute(.font, in: range) { value, subRange, _ in
             guard let font = value as? NSFont else { return }
             let newFont = NSFont(descriptor: font.fontDescriptor, size: max(6, font.pointSize + delta)) ?? font
@@ -125,7 +142,17 @@ final class RichTextEditorController: ObservableObject {
     private func applyFontTrait(_ trait: NSFontTraitMask) {
         guard let tv = textView else { return }
         let range = tv.selectedRange()
-        guard range.length > 0 else { return }
+
+        if range.length == 0 {
+            let current = (tv.typingAttributes[.font] as? NSFont) ?? NSFont.systemFont(ofSize: NSFont.systemFontSize)
+            let symbolicTrait: NSFontDescriptor.SymbolicTraits = trait == .boldFontMask ? .bold : .italic
+            let hasTrait = current.fontDescriptor.symbolicTraits.contains(symbolicTrait)
+            let newFont = hasTrait
+                ? NSFontManager.shared.convert(current, toNotHaveTrait: trait)
+                : NSFontManager.shared.convert(current, toHaveTrait: trait)
+            tv.typingAttributes[.font] = newFont
+            return
+        }
 
         var hasTrait = false
         if let font = tv.textStorage?.attribute(.font, at: range.location, effectiveRange: nil) as? NSFont {
