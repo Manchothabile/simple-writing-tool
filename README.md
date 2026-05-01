@@ -41,8 +41,10 @@ A minimal, distraction-free text editor for macOS with an optional AI writing as
 1. Go to the [Releases](../../releases) page
 2. Download `Simple Writing Tool.zip` from the latest release
 3. Unzip and move `Simple Writing Tool.app` to your Applications folder
-4. **Right-click → Open** the first time (required because the app is not notarized by Apple)
+4. **Right-click → Open → Open** the first time (macOS will warn the app is not notarized — this is expected)
 
+> If macOS shows *"Apple could not verify…"*, go to **System Settings → Privacy & Security → Open Anyway**, or run in Terminal: `xattr -cr "/Applications/Simple Writing Tool.app"`
+>
 > After the first launch, double-click works normally.
 
 ### Build from source
